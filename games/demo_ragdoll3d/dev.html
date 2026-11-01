@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>demo_ragdoll3d dev</title>
+    <style>
+      body { margin: 0; background: #0b0b0e; display: grid; place-items: center; height: 100vh }
+      canvas { grid-area: 1 / 1 }
+      .lil-gui.root { max-height: 100vh; overflow-y: auto }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      // The demo of ragdoll3d: index.html, the manager truth and blast all in this tab, one seat on them
+      // over a loopback, stepped on the page's clock, and a panel: the charge's blast, the shotgun, how
+      // long the victim lies, the ragdoll's joints, a button that sets the charge off now, and the
+      // render3d settings that change how it looks or what it costs. The truths are kept on
+      // `window.__scenes` and the page on `window.__page`. The frame rate is three's stats panel, the
+      // stats plugin, at the top left.
+      //
+      // The keys are the game's: a click on the page takes the pointer, the mouse aims, W A S D walk.
+      // A press on the panel stops at it, so it never takes the pointer, and keys typed into it reach
+      // neither this page nor the game.
+      //
+      // The charge, the shotgun and the victim are edited in the tab's one copy of the definitions, which
+      // their rules read when they act; the joints in ragdoll3d's PHYSICS, read when a ragdoll is made, so
+      // a change is the next death's. Nothing is written to disk: `copy JSON` copies the panel's numbers,
+      // and `reset to the file` puts the file's back.
+      //
+      // The render3d folder: the pixel ratio, drawn smooth or as blocks; the exposure and the tone
+      // mapping; the AO's and the bloom's numbers, on their passes as they draw. The AO and the bloom
+      // on or off load the page again with `?ao=` and `?bloom=`, since the renderer's reversed depth and
+      // its composer are fixed when it is made.
+      import { boot } from '#engine/engine.ts'
+      import { accept, load, manager, link, view } from '#addons/scenemanager/scenemanager.addon.ts'
+      import { loopback } from '#addons/loopback/loopback.addon.ts'
+      import { prepared } from '#plugins/loader/loader.sim.ts'
+      import { PHYSICS } from '#plugins/ragdoll3d/ragdoll3d.sim.ts'
+      import GUI from 'lil-gui'
+      import { sim } from './demo_ragdoll3d.sim.ts'
+      import { scene as blastScene } from './blast.sim.ts'
+      import file from './demo_ragdoll3d.scene.json'
+
+      const clone = v => JSON.parse(JSON.stringify(v))
+      const params = new URLSearchParams(location.search)
+      // The AO and the bloom, on or off from the address, before the renderer is made.
+      const r3 = blastScene.prefabs.render3d
+      const fileBloom = clone(r3.bloom)
+      if (params.has('ao')) r3.ao.on = params.get('ao') === '1'
+      if (params.get('bloom') === '0') delete r3.bloom
+
+      const defs = await prepared(blastScene.world, blastScene.world.defs)
+      // The file's numbers, as they were, for `reset to the file`.
+      const fileOwn = clone({ tnt: defs.tnt, dynamite: defs.dynamite, player: defs.player, victim: defs.victim, limit: PHYSICS.limit })
+
+      const dt = file.prefabs.engine.dt
+      const truth = boot(file, sim)
+      window.__scenes = await load(truth, import.meta.url)
+      let client
+      const page = view(link(loopback(accept(manager(truth)))), file, import.meta.url, (me, scene) => {
+        client = me
+        for (const surface of [me.plugins.render3d ?? me.plugins.render2d, me.plugins.ui]) {
+          if (!surface) continue
+          const canvas = document.createElement('canvas')
+          canvas.width = scene.prefabs.engine.width
+          canvas.height = scene.prefabs.engine.height
+          document.body.appendChild(canvas)
+          surface.mount(canvas)
+        }
+        me.plugins.stats?.mount(document.body)
+      })
+      window.__page = page
+
+      const gui = new GUI({ title: 'demo_ragdoll3d dev' })
+      for (const type of ['keydown', 'keyup', 'click', 'mousedown', 'contextmenu', 'wheel'])
+        gui.domElement.addEventListener(type, e => e.stopPropagation())
+
+      // ---------- ragdoll3d ----------
+
+      const blast = gui.addFolder('blast')
+      blast.add(defs.tnt.blast, 'impulse', 0, 5000, 10).name('impulse per area')
+      blast.add(defs.tnt.blast, 'radius', 0.5, 15, 0.1).name('radius (m)')
+      blast.add(defs.tnt.blast, 'falloff', 0, 10, 0.1).name('falloff (m)')
+      blast.add({ now: () => { const b = window.__scenes.get('blast')?.rows.find(r => r.kind === 'tnt'); if (b) b.data.fuse = 0 } }, 'now').name('detonate now')
+      blast.add(defs.tnt, 'launch', 0, 60, 0.5).name('throws you at (m/s)')
+      const dynamite = gui.addFolder('dynamite')
+      dynamite.add(defs.dynamite.blast, 'impulse', 0, 5000, 10).name('impulse per area')
+      dynamite.add(defs.dynamite.blast, 'radius', 0.5, 15, 0.1).name('radius (m)')
+      dynamite.add(defs.dynamite.blast, 'falloff', 0, 10, 0.1).name('falloff (m)')
+      dynamite.add(defs.dynamite, 'reach', 0.5, 20, 0.1).name('kills within (m)')
+      dynamite.add(defs.dynamite, 'launch', 0, 60, 0.5).name('throws you at (m/s)')
+      const you = gui.addFolder('you')
+      you.add(defs.player, 'walk', 0.5, 20, 0.1).name('walk (m/s)')
+      you.add(defs.player.launch, 'up', 0, 1, 0.01).name('share of a throw that is up')
+      you.add(defs.player.launch, 'gravity', 1, 40, 0.5).name('gravity (m/s²)')
+      dynamite.add(defs.dynamite.fuse, 'burn', 0.2, 10, 0.1).name('fuse burns (s)')
+      dynamite.add(defs.player.drop.toss, '0', 0, 15, 0.1).name('G: toss ahead (m/s)')
+      dynamite.add(defs.player.drop.toss, '1', 0, 10, 0.1).name('G: toss up (m/s)')
+      dynamite.add(defs.player.drop, 'roll', 0, 30, 0.5).name('G: roll (rad/s)')
+      dynamite.add(defs.player.throw, 'speed', 0, 40, 0.5).name('right click: speed (m/s)')
+      dynamite.add(defs.player.throw, 'lift', 0, 10, 0.1).name('right click: lift (m/s)')
+      dynamite.add(defs.player.throw, 'roll', 0, 30, 0.5).name('right click: roll (rad/s)')
+      const shotgun = gui.addFolder('shotgun')
+      shotgun.add(defs.player.shotgun, 'impulse', 0, 2000, 1).name('impulse (N·s)')
+      shotgun.add(defs.player.shotgun, 'range', 1, 200, 1).name('range (m)')
+      shotgun.add(defs.player.shotgun, 'cooldown', 0.05, 3, 0.05).name('cooldown (s)')
+      gui.add(defs.victim, 'again', 1, 30, 0.5).name('she stands again after (s)')
+      // The joints: how far every bone may swing from the way it pointed at death, and roll about itself,
+      // the same for every joint, read when a ragdoll is made, so a change is the next death's.
+      const joints = gui.addFolder('joints')
+      joints.add(PHYSICS.limit, 'swing', 0, 180, 1).name('swing (°)')
+      joints.add(PHYSICS.limit, 'roll', 0, 180, 1).name('roll ± (°)')
+
+      gui.add({ copy: () => navigator.clipboard?.writeText(JSON.stringify({ tnt: defs.tnt, dynamite: defs.dynamite, player: { shotgun: defs.player.shotgun, drop: defs.player.drop, throw: defs.player.throw }, victim: defs.victim, limit: PHYSICS.limit }, null, 2)) }, 'copy').name('copy JSON')
+      // The file's numbers written back, key by key, so every control keeps its object.
+      const into = (to, from) => {
+        for (const [k, v] of Object.entries(from)) {
+          if (Array.isArray(v) && Array.isArray(to[k])) v.forEach((x, i) => { to[k][i] = clone(x) })
+          else if (v && typeof v === 'object') into(to[k], v)
+          else to[k] = clone(v)
+        }
+      }
+      gui.add({ reset: () => {
+        into(defs.tnt, fileOwn.tnt)
+        into(defs.dynamite, fileOwn.dynamite)
+        into(defs.player, fileOwn.player)
+        into(defs.victim, fileOwn.victim)
+        into(PHYSICS.limit, fileOwn.limit)
+        for (const c of gui.controllersRecursive()) c.updateDisplay()
+      } }, 'reset').name('reset to the file')
+
+      // ---------- render3d ----------
+
+      const reload = (key, value) => {
+        const url = new URL(location.href)
+        url.searchParams.set(key, value)
+        location.href = url.href
+      }
+      const rf = gui.addFolder('render3d')
+      const r3d = () => client?.plugins.render3d
+      const look = { ratio: r3.pixelRatio ?? 1, blocks: false, exposure: r3.exposure ?? 1, tone: r3.tone ?? 'none' }
+      const ratio = () => r3d()?.ratio(look.ratio, look.blocks ? 'blocks' : 'smooth')
+      rf.add(look, 'ratio', 0.1, 3, 0.05).name('pixel ratio').onChange(ratio)
+      rf.add(look, 'blocks').name('pixels as blocks').onChange(ratio)
+      rf.add(look, 'exposure', 0, 4, 0.01).onChange(v => {
+        const renderer = r3d()?.renderer
+        if (renderer) renderer.toneMappingExposure = v
+      })
+      rf.add(look, 'tone', ['neutral', 'none']).name('tone mapping').onChange(v => {
+        const three = r3d()?.THREE, renderer = r3d()?.renderer
+        if (renderer) renderer.toneMapping = v === 'neutral' ? three.NeutralToneMapping : three.NoToneMapping
+      })
+      // The passes of the composer as it draws: the AO's and the bloom's.
+      const passOf = has => r3d()?.composer?.passes.find(has)
+      const ao = clone(r3.ao)
+      const af = rf.addFolder('ao')
+      af.add({ on: !!r3.ao.on }, 'on').onChange(v => reload('ao', v ? '1' : '0'))
+      const setAo = () => {
+        Object.assign(client.plugins.wire.scene.prefabs.render3d.ao, ao)
+        const gtao = passOf(p => 'updateGtaoMaterial' in p)
+        if (!gtao) return
+        gtao.updateGtaoMaterial({ radius: ao.radius, thickness: ao.thickness, distanceFallOff: ao.falloff, scale: ao.scale, samples: ao.samples })
+        gtao.blendIntensity = ao.intensity
+      }
+      af.add(ao, 'radius', 0.01, 10, 0.01).onChange(setAo)
+      af.add(ao, 'thickness', 0.01, 5, 0.01).onChange(setAo)
+      af.add(ao, 'falloff', 0, 5, 0.01).onChange(setAo)
+      af.add(ao, 'scale', 0, 5, 0.01).onChange(setAo)
+      af.add(ao, 'intensity', 0, 2, 0.01).onChange(setAo)
+      af.add(ao, 'samples', 2, 32, 1).onChange(setAo)
+      const bloom = clone(fileBloom)
+      const bf = rf.addFolder('bloom')
+      bf.add({ on: !!r3.bloom }, 'on').onChange(v => reload('bloom', v ? '1' : '0'))
+      const setBloom = () => {
+        const prefab = client.plugins.wire.scene.prefabs.render3d
+        if (prefab.bloom) Object.assign(prefab.bloom, bloom)
+        const pass = passOf(p => 'strength' in p && 'threshold' in p)
+        if (!pass) return
+        pass.strength = bloom.strength
+        pass.radius = bloom.radius
+        pass.threshold = bloom.threshold
+      }
+      bf.add(bloom, 'strength', 0, 3, 0.01).onChange(setBloom)
+      bf.add(bloom, 'radius', 0, 1, 0.01).onChange(setBloom)
+      bf.add(bloom, 'threshold', 0, 10, 0.05).onChange(setBloom)
+
+      // Every folder starts closed but the plugin's own.
+      for (const folder of gui.foldersRecursive()) if (folder !== blast) folder.close()
+
+      let last = performance.now(), owed = 0
+      const loop = async now => {
+        owed += Math.min((now - last) / 1000, 0.25)
+        last = now
+        // A frame that throws is logged, and the next frame goes on.
+        try {
+          page.input()
+          while (owed >= dt) { truth.step(dt); owed -= dt }
+          await page.frame(owed / dt)
+        } catch (e) { console.error(e) }
+        requestAnimationFrame(loop)
+      }
+      requestAnimationFrame(loop)
+    </script>
+  </body>
+</html>

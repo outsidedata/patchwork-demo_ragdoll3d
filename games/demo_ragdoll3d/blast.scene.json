@@ -1,0 +1,101 @@
+{
+  "world": {
+    "predict": { "epsilon": 0.000001, "cutoff": 60, "halflife": 100, "snap": 2, "below": 0.0001 },
+    "defs": "demo_ragdoll3d",
+    "shapes3d": {
+      "kinds": {
+        "floor": { "shape": { "plane": { "size": [400, 400] } }, "look": { "colour": "#ffffff", "roughness": 0.95, "thick": 0.5, "map": "checker", "scale": 2 }, "surface": { "friction": 0.8, "restitution": 0.1, "rollingResistance": 0.05 } },
+        "ramp": { "shape": { "plane": { "size": [8, 5], "tilt": 0.7853981633974483 } }, "look": { "colour": "#c07850", "roughness": 0.8, "thick": 0.3, "map": "checker", "scale": 2 }, "surface": { "friction": 0.3, "restitution": 0.1, "rollingResistance": 0.05 } }
+      }
+    },
+    "solids": { "mods": { "models": "shapes3d" } },
+    "particle3d": { "effects": "effects", "hold": 0.25 },
+    "anim": {
+      "still": 0.05,
+      "shift": 0.75,
+      "leap": 0.5,
+      "landFall": 7.5,
+      "moves": 0.05,
+      "turns": 30,
+      "kinds": {
+        "victim": { "rig": "farmer-rig", "model": "farmer", "fade": 0.15, "reads": { "pos": "pos", "yaw": "yaw", "vel": "vel", "grounded": "grounded", "limp": "limp" } }
+      }
+    },
+    "ragdoll3d": { "kinds": ["victim"], "physics": true },
+    "hitscan3d": { "kinds": { "victim": { "off": "limp" } }, "mods": { "solids": ["shapes3d"], "behaviors": "shapes3d", "bodies": "ragdoll3d" } },
+    "box3d": {
+      "gravity": [0, -9.8, 0],
+      "subStepCount": 8,
+      "static": [],
+      "kinds": {
+        "dynamite": { "type": "dynamic", "angularDamping": 0.4, "shapes": [{ "cylinder": { "height": 0.24, "radius": 0.028, "yOffset": -0.12, "sides": 16 }, "density": 900, "baseMaterial": { "friction": 0.6, "restitution": 0.25, "rollingResistance": 0.02 } }] }
+      },
+      "mods": { "kinds": "ragdoll3d", "fixed": ["shapes3d"] }
+    },
+    "loader": {
+      "assets": {
+        "demo_ragdoll3d": { "type": "json", "url": "/games/demo_ragdoll3d/assets/demo_ragdoll3d.json", "preload": true },
+        "farmer-rig": { "type": "json", "url": "/games/demo_ragdoll3d/assets/farmer.rig.json", "preload": true },
+        "farmer": { "type": "model", "url": "/games/demo_ragdoll3d/assets/farmer.glb" },
+        "shotgun": { "type": "model", "url": "/games/demo_ragdoll3d/assets/shotgun.glb" },
+        "tnt": { "type": "model", "url": "/games/demo_ragdoll3d/assets/tnt.glb", "preload": true },
+        "dynamite": { "type": "model", "url": "/games/demo_ragdoll3d/assets/dynamite.glb", "preload": true },
+        "effects": { "type": "json", "url": "/games/demo_ragdoll3d/assets/effects.json", "preload": true },
+        "checker": { "type": "texture", "url": "/games/demo_ragdoll3d/assets/checker-1024.webp", "preload": true, "wrap": "repeat", "anisotropy": 8 },
+        "fx": { "type": "sheet", "url": "/games/demo_ragdoll3d/assets/fx.json", "preload": true }
+      }
+    }
+  },
+  "plugins": ["loader", "scenemanager", "store", "player", "box3d", "environment3d", "hitscan3d", "anim", "ragdoll3d", "solids", "particle3d", "render3d", "stats"],
+  "seats": 1,
+  "prefabs": {
+    "engine": { "dt": 0.016666666666666666, "width": 960, "height": 540 },
+    "scenemanager": { "out": {} },
+    "loader": {},
+    "render3d": {
+      "camera": { "fov": 45, "near": 0.1, "far": 200, "at": [4, 2.2, 6], "look": [0, 0.9, -1] },
+      "pixelRatio": 2,
+      "tone": "neutral",
+      "exposure": 1.1,
+      "shadows": "soft",
+      "background": "#5b6470",
+      "ao": { "on": false, "radius": 0.8, "thickness": 0.3, "falloff": 1, "scale": 1.5, "intensity": 0.8, "samples": 16 },
+      "bloom": { "strength": 0.2, "radius": 0.4, "threshold": 4 }
+    },
+    "environment3d": {
+      "sun": {
+        "at": [30, 60, 40],
+        "color": "#fff4e6",
+        "power": 2.2,
+        "shadow": { "map": 1024, "half": 100, "near": 1, "far": 200, "distance": 60, "bias": -0.0002, "normalBias": 0.04 }
+      },
+      "sky": { "color": "#c9d6e8", "ground": "#4a4036", "power": 1.1 }
+    },
+    "player": { "seat": 0, "pos": [0, 1.1, 3], "yaw": 3.141592653589793, "pitch": -0.15, "aim": null, "walk": [0, 0], "firing": false, "cool": 0, "dropCool": 0, "vel": [0, 0, 0] },
+    "dynamite": { "pos": [0, 0, 0], "rot": [0, 0, 0, 1], "vel": [0, 0, 0], "spin": [0, 0, 0], "awake": true, "left": 0, "spark": -1 },
+    "particle3d": { "next": 0, "live": [] },
+    "start": { "slot": 0 },
+    "box3d": {},
+    "victim": { "pos": [0, 0, 0], "yaw": 0, "vel": [0, 0, 0], "grounded": true, "limp": false, "limpFor": 0, "blow": null, "pose": null, "rig": "stand", "ragdoll": null },
+    "tnt": { "pos": [0, 0, 0], "yaw": 0, "fuse": 1000000000, "out": 0, "boom": 0 },
+    "bone": { "of": 0, "bone": "", "half": 0.1, "radius": 0.05, "pos": [0, 0, 0], "rot": [0, 0, 0, 1], "vel": [0, 0, 0], "spin": [0, 0, 0], "awake": true },
+    "bonejoint": { "a": 0, "b": 0, "joint": null },
+    "floor": { "pos": [0, 0, 0], "yaw": 0 },
+    "ramp": { "pos": [0, 0, 0], "yaw": 0 }
+  },
+  "actors": [
+    { "is": "scenemanager" },
+    { "is": "loader" },
+    { "is": "box3d" },
+    { "is": "particle3d" },
+    { "is": "floor" },
+    { "is": "ramp", "pos": [0, 2.5, -5.5], "yaw": 3.141592653589793 },
+    { "is": "ramp", "pos": [-5.5, 2.5, 0], "yaw": 4.71238898038469 },
+    { "is": "ramp", "pos": [5.5, 2.5, 0], "yaw": 1.5707963267948966 },
+    { "is": "start", "slot": 0 },
+    { "is": "victim", "pos": [0, 0, -1], "yaw": 0 },
+    { "is": "victim", "pos": [-2, 0, 0], "yaw": 1.5707963267948966 },
+    { "is": "victim", "pos": [3, 0, 0], "yaw": -1.5707963267948966 },
+    { "is": "tnt", "pos": [0, 0, 0], "yaw": 0 }
+  ]
+}

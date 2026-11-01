@@ -1,0 +1,53 @@
+{
+  "cap": 2000,
+  "ppm": 64,
+  "effects": {
+    "flash": [
+      {"sheet": "fx", "clip": "glow", "n": [1, 1], "life": [0.03, 0.045], "size": [0.38, 0.5], "grow": 1.3, "tint": 16771232, "gain": 2.2, "a1": 0, "add": true},
+      {"sheet": "fx", "clip": "spark", "n": [2, 3], "life": [0.025, 0.04], "size": [0.35, 0.55], "speed": [14, 22], "spread": 0.08, "drag": 6, "tint": 16771232, "gain": 2.5, "a1": 0, "add": true, "stretch": true},
+      {"sheet": "fx", "clip": "spark", "n": [2, 4], "life": [0.04, 0.08], "size": [0.25, 0.4], "speed": [16, 28], "spread": 0.3, "drag": 4, "tint": 16765562, "gain": 2, "a1": 0, "add": true, "stretch": true},
+      {"sheet": "fx", "clip": "puff", "n": [0, 1], "life": [0.35, 0.6], "size": [0.25, 0.4], "grow": 2.8, "speed": [1, 2.5], "spread": 0.5, "drag": 3, "tint": 7236198, "a0": 0.3, "a1": 0}
+    ],
+    "tracer": [
+      {"sheet": "fx", "clip": "beam", "n": [1, 1], "life": [0.05, 0.05], "size": [0.07, 0.07], "tint": 16770992, "gain": 2.5, "a0": 0.9, "a1": 0, "add": true, "beam": true}
+    ],
+    "boom": [
+      {"sheet": "fx", "clip": "glow", "n": [1, 1], "life": [0.18, 0.18], "size": [9, 9], "grow": 1.8, "tint": 16777215, "gain": 8, "a1": 0, "add": true},
+      {"sheet": "fx", "clip": "glow", "n": [1, 1], "life": [0.6, 0.6], "size": [5, 5], "grow": 2.2, "tint": 16760400, "tint1": 16729344, "gain": 4, "a1": 0, "add": true},
+      {"sheet": "fx", "clip": "puff", "n": [30, 40], "life": [0.6, 1.1], "size": [1.4, 2.2], "grow": 3, "speed": [5, 12], "spread": 1.5, "drag": 3.5, "tint": 16769152, "tint1": 13115392, "gain": 4, "a0": 1, "a1": 0, "fade": 0.5, "spin": 2, "add": true},
+      {"sheet": "fx", "clip": "puff", "after": 0.05, "n": [16, 22], "life": [0.9, 1.5], "size": [1.6, 2.4], "grow": 2.5, "speed": [2, 6], "dir": [0, 1, 0], "spread": 0.7, "g": -3, "drag": 2, "tint": 16747520, "tint1": 4200448, "gain": 3, "a0": 1, "a1": 0, "spin": 1.2, "add": true},
+      {"sheet": "fx", "clip": "ring", "n": [1, 1], "life": [0.5, 0.5], "size": [1, 1], "grow": 18, "dir": [0, 1, 0], "face": true, "tint": 16773312, "gain": 3, "a0": 0.9, "a1": 0, "add": true},
+      {"sheet": "fx", "clip": "ring", "after": 0.04, "n": [1, 1], "life": [0.8, 0.8], "size": [1, 1], "grow": 14, "dir": [0, 1, 0], "face": true, "tint": 9075292, "a0": 0.7, "a1": 0},
+      {"sheet": "fx", "clip": "puff", "after": 0.03, "n": [24, 30], "life": [1.4, 2.2], "size": [0.8, 1.2], "grow": 3.5, "box": [-0.4, 0, -0.4, 0.4, 0.1, 0.4], "dir": [0, 0.15, 0], "speed": [8, 14], "drag": 2.5, "tint": 9075292, "tint1": 11116688, "a0": 0.8, "a1": 0, "spin": 0.8},
+      {"sheet": "fx", "clip": "spark", "n": [70, 90], "life": [0.4, 0.9], "size": [0.4, 0.8], "speed": [14, 30], "spread": 1.4, "g": 9.8, "drag": 1.2, "tint": 16773312, "tint1": 16738842, "gain": 5, "a1": 0, "add": true, "stretch": true},
+      {"sheet": "fx", "clip": "glow", "n": [40, 55], "life": [1.5, 2.8], "size": [0.1, 0.2], "speed": [5, 13], "spread": 1.2, "g": 9.8, "drag": 0.3, "tint": 16738842, "tint1": 3346688, "gain": 3, "a1": 0, "fade": 0.6, "add": true},
+      {"sheet": "fx", "clip": "glow", "n": [30, 40], "life": [1.8, 2.6], "size": [0.12, 0.26], "speed": [6, 14], "spread": 1.1, "g": 9.8, "drag": 0.3, "tint": 2761760, "a0": 1, "a1": 0, "fade": 0.4, "spin": 5},
+      {"sheet": "fx", "clip": "puff", "after": 0.12, "n": [26, 34], "life": [3.5, 5.5], "size": [1.6, 2.6], "grow": 3.5, "box": [-0.6, 0.2, -0.6, 0.6, 1.4, 0.6], "dir": [0, 1, 0], "spread": 0.6, "speed": [2, 5], "g": -1.2, "drag": 0.9, "tint": 2763306, "tint1": 7038304, "a0": 0.95, "a1": 0, "fade": 2, "spin": 0.5}
+    ],
+    "smoulder": [
+      {"sheet": "fx", "clip": "puff", "n": [1, 1], "every": 0.5, "life": [0.6, 0.6], "size": [2.6, 2.6], "dir": [0, 1, 0], "face": true, "speed": [0, 0], "tint": 1315860, "a0": 0.75, "a1": 0.75},
+      {"sheet": "fx", "clip": "glow", "n": [1, 1], "every": 0.12, "life": [0.25, 0.45], "size": [2.4, 3.2], "box": [-0.2, 0.05, -0.2, 0.2, 0.15, 0.2], "speed": [0, 0], "tint": 16742400, "gain": 2.2, "a0": 0.45, "a1": 0, "add": true},
+      {"sheet": "fx", "clip": "puff", "n": [2, 3], "every": 0.04, "life": [0.5, 0.9], "size": [0.5, 0.9], "grow": 1.6, "box": [-0.55, 0, -0.55, 0.55, 0.1, 0.55], "dir": [0, 1, 0], "spread": 0.35, "speed": [1, 2], "g": -3, "drag": 1.2, "tint": 16757824, "tint1": 13574144, "gain": 3, "a0": 0.9, "a1": 0, "spin": 2, "add": true},
+      {"sheet": "fx", "clip": "puff", "n": [1, 2], "every": 0.05, "life": [0.3, 0.5], "size": [0.35, 0.55], "grow": 1.3, "box": [-0.35, 0, -0.35, 0.35, 0.05, 0.35], "dir": [0, 1, 0], "spread": 0.25, "speed": [0.8, 1.6], "g": -2, "drag": 1.5, "tint": 16774352, "tint1": 16750080, "gain": 4, "a0": 0.95, "a1": 0, "spin": 2.5, "add": true},
+      {"sheet": "fx", "clip": "spark", "n": [1, 3], "every": 0.06, "life": [0.8, 1.6], "size": [0.1, 0.18], "box": [-0.5, 0, -0.5, 0.5, 0.2, 0.5], "dir": [0, 1, 0], "spread": 0.6, "speed": [1.5, 4], "g": -2, "drag": 0.8, "tint": 16771232, "tint1": 13574144, "gain": 4, "a1": 0, "fade": 0.5, "add": true, "stretch": true},
+      {"sheet": "fx", "clip": "puff", "after": 0.2, "n": [2, 3], "every": 0.12, "life": [3, 5], "size": [0.8, 1.4], "grow": 3.5, "box": [-0.5, 0.6, -0.5, 0.5, 1.2, 0.5], "dir": [0, 1, 0], "spread": 0.4, "speed": [1, 2], "g": -0.6, "drag": 0.5, "tint": 2763306, "tint1": 7038304, "a0": 0.7, "a1": 0, "fade": 2, "spin": 0.5}
+    ],
+    "pop": [
+      {"sheet": "fx", "clip": "glow", "n": [1, 1], "life": [0.08, 0.08], "size": [1.6, 1.6], "grow": 1.5, "tint": 16773312, "gain": 4, "a1": 0, "add": true},
+      {"sheet": "fx", "clip": "puff", "n": [6, 8], "life": [0.3, 0.5], "size": [0.4, 0.6], "grow": 2.4, "speed": [2, 4.5], "spread": 1.4, "drag": 4, "tint": 16752704, "tint1": 3815986, "gain": 2.5, "a0": 1, "a1": 0, "spin": 1.5, "add": true},
+      {"sheet": "fx", "clip": "ring", "n": [1, 1], "life": [0.25, 0.25], "size": [0.3, 0.3], "grow": 9, "dir": [0, 1, 0], "face": true, "tint": 16773312, "gain": 1.5, "a0": 0.55, "a1": 0, "add": true},
+      {"sheet": "fx", "clip": "spark", "n": [14, 20], "life": [0.2, 0.45], "size": [0.2, 0.35], "speed": [7, 14], "spread": 1.4, "g": 9.8, "drag": 1.5, "tint": 16773312, "tint1": 16738842, "gain": 3, "a1": 0, "add": true, "stretch": true},
+      {"sheet": "fx", "clip": "glow", "n": [6, 10], "life": [0.8, 1.3], "size": [0.05, 0.1], "speed": [3, 6], "spread": 1.2, "g": 9.8, "drag": 0.4, "tint": 2761760, "a0": 1, "a1": 0, "fade": 0.3},
+      {"sheet": "fx", "clip": "puff", "after": 0.05, "n": [4, 6], "life": [1.2, 2], "size": [0.5, 0.8], "grow": 2.6, "speed": [0.8, 2], "spread": 1.2, "g": -0.7, "drag": 1.4, "tint": 5000268, "tint1": 7038304, "a0": 0.75, "a1": 0, "spin": 0.6}
+    ],
+    "fuse": [
+      {"sheet": "fx", "clip": "glow", "n": [1, 1], "lasts": true, "follow": true, "size": [0.05, 0.05], "tint": 16765562, "gain": 4, "add": true},
+      {"sheet": "fx", "clip": "spark", "every": 0.025, "n": [1, 3], "life": [0.08, 0.2], "size": [0.04, 0.08], "speed": [0.6, 1.6], "dir": [0, 1, 0], "spread": 1.4, "g": 3, "drag": 1.5, "tint": 16771232, "tint1": 16738842, "gain": 3, "a1": 0, "add": true, "stretch": true},
+      {"sheet": "fx", "clip": "puff", "every": 0.08, "n": [1, 1], "life": [0.4, 0.7], "size": [0.04, 0.07], "grow": 2.5, "speed": [0.1, 0.3], "dir": [0, 1, 0], "spread": 0.4, "g": -0.4, "drag": 1, "tint": 9474192, "a0": 0.4, "a1": 0}
+    ],
+    "dirt": [
+      {"sheet": "fx", "clip": "puff", "n": [2, 3], "life": [0.5, 0.9], "size": [0.5, 0.8], "grow": 2.5, "speed": [1, 3], "spread": 0.7, "drag": 3, "tint": 9075292, "a0": 0.7, "a1": 0, "spin": 0.8},
+      {"sheet": "fx", "clip": "glow", "n": [3, 6], "life": [0.4, 0.7], "size": [0.1, 0.18], "speed": [3, 7], "spread": 0.8, "g": 9.8, "tint": 4801578, "a1": 0}
+    ]
+  }
+}

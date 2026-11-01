@@ -1,0 +1,42 @@
+{
+  "player": {
+    "sens": 0.0022,
+    "pad": { "look": [2.6, 1.6], "most": 0.1 },
+    "turn": { "slew": 2.1, "lerp": 8 },
+    "pitch": [-0.330796326794897, 0.72],
+    "walk": 6,
+    "launch": { "stand": 1.1, "gravity": 14, "up": 0.55 },
+    "eye": [0, 0.38, -1.1],
+    "reticle": { "inner": 0.006, "outer": 0.009, "colour": "#f2f2f2" },
+    "shotgun": {
+      "model": "shotgun",
+      "view": { "at": [0.13, -0.17, -0.4], "turn": [0, 0, 0], "near": 0.01, "far": 10 },
+      "muzzle": [0.13, -0.08, -1.02],
+      "range": 100,
+      "damage": 1,
+      "impulse": 500,
+      "cooldown": 0.9
+    },
+    "drop": { "ahead": 0.5, "height": 0.9, "toss": [3, 1.5], "roll": 6, "every": 0.4 },
+    "throw": { "ahead": 0.4, "speed": 12, "lift": 2, "roll": 8 }
+  },
+  "victim": { "again": 5 },
+  "tnt": {
+    "size": 0.8,
+    "reach": 1000000000,
+    "again": 5,
+    "blast": { "radius": 0.5, "falloff": 10, "impulse": 1900 },
+    "launch": 32,
+    "model": "tnt"
+  },
+  "dynamite": {
+    "model": "dynamite",
+    "fuse": { "length": 0.1, "root": 0.009, "radius": 0.0025, "colour": "#4a3b2c", "burn": 3 },
+    "reach": 10,
+    "blast": { "radius": 0.5, "falloff": 10, "impulse": 300 },
+    "launch": 20,
+    "pop": "pop"
+  },
+  "bone": {},
+  "bonejoint": {}
+}

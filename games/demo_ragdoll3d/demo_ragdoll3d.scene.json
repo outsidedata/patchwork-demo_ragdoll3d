@@ -1,0 +1,42 @@
+{
+  "world": {
+    "player": {
+      "actions": {
+        "ahead": { "label": "Walk ahead and back", "keys": [["ArrowDown", "s", "PadStickDown"], ["ArrowUp", "w", "PadStickUp"]] },
+        "aside": { "label": "Walk left and right", "keys": [["ArrowRight", "d", "PadStickRight"], ["ArrowLeft", "a", "PadStickLeft"]] },
+        "look": { "label": "Aim", "keys": [["PadRightStickLeft"], ["PadRightStickRight"], ["PadRightStickUp"], ["PadRightStickDown"]] },
+        "fire": { "label": "Fire", "keys": ["Mouse0", "Pad5"] },
+        "drop": { "label": "Drop dynamite", "keys": ["g", "Pad2"] },
+        "throw": { "label": "Throw dynamite", "keys": ["Mouse2", "Pad3"] }
+      },
+      "deadzone": 0.15,
+      "resolution": 64
+    }
+  },
+  "prefabs": {
+    "engine": {
+      "dt": 0.016666666666666666
+    },
+    "scenemanager": {
+      "scenes": {
+        "blast": {
+          "file": "blast.scene.json",
+          "suspend": true
+        }
+      },
+      "dt": 0.016666666666666666,
+      "entry": "blast",
+      "port": 9140
+    },
+    "store": {}
+  },
+  "actors": [
+    {
+      "is": "scenemanager"
+    }
+  ],
+  "plugins": [
+    "scenemanager"
+  ],
+  "seats": 1
+}
